@@ -71,6 +71,4 @@ P-value  больше 0,05, поэтому статистически значи
 
 ![image](https://user-images.githubusercontent.com/100629361/206896802-38fb13de-26a3-47e6-916b-d1f2bd5fda41.png)
 
-![image](https://user-images.githubusercontent.com/100629361/206896729-6cc444c8-e2da-4d21-94ac-d96ff0155d5c.png)
-
 По результатм теста не рекомендуется раскатывать новый алгоритм на всех пользователей.
