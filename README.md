@@ -22,9 +22,27 @@
 
 Теперь для проверки различий проведем бутстрап.
 
-![image](https://user-images.githubusercontent.com/100629361/206895802-8659d53a-e5dc-4c97-a06c-4009c00cf857.png)
+```
+# Проведем бутстрап
 
-![image](https://user-images.githubusercontent.com/100629361/206895815-091dd806-6d8f-4227-9f0f-3b747f0e9211.png)
+def bootstrap_aa(n_bootstrap: int = 10_000, 
+                 B: int = 500,
+) -> List:
+    pvalues = []
+    for _ in range(n_bootstrap):
+        group_2 = df_aa[df_aa['exp_group'] == 2]['ctr'].sample(B, replace=False).tolist()
+        group_3 = df_aa[df_aa['exp_group'] == 3]['ctr'].sample(B, replace=False).tolist()
+        pvalues.append(st.ttest_ind(group_2, group_3, equal_var=False)[1])
+    
+    return pvalues
+```
+
+```
+perc = sum([1 for i in pvalues if i <= 0.05]) / 10000 * 100
+print(f'{perc}% is the percent of p-values which are less than 0.05 ')
+
+4.569999999999999% is the percent of p-values which are less than 0.05 
+```
 
 Статистически значимые различия получаем в 4,6% , что соответствует ошибке I рода. 
 Система сплитования на группы работает корректно.
@@ -41,14 +59,25 @@
 
 P-value  больше 0,05, поэтому статистически значимого различия нет. Это зависит от того, что распределение ctr второй группы не нормальное, применение теста не корректно.
 
-![image](https://user-images.githubusercontent.com/100629361/206896204-ea2e2d3b-8ed6-4000-92b3-f417674f8422.png)
+```
+st.ttest_ind(group_a, group_b, equal_var=False)
 
-
+Ttest_indResult(statistic=0.7094392041270486, pvalue=0.4780623130874935)
+```
+```
+ group_a.mean(), group_b.mean()
+ 
+(0.21560459841296287, 0.21441927347479375)
+```
 ## Mann-Witney test
 
 Тест Манна Уитни показывает статистические различия.
 
-![image](https://user-images.githubusercontent.com/100629361/206896251-df070a32-8944-4cd7-9ace-0ed3fda36434.png)
+```
+st.mannwhitneyu(group_a, group_b, alternative='two-sided')
+
+MannwhitneyuResult(statistic=56601260.5, pvalue=6.0376484617779035e-56)
+```
 
 ## Сглаженный CTR
 
